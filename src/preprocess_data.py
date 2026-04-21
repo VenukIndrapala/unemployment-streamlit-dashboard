@@ -59,6 +59,17 @@ class DataPreprocessor:
                 print(f"Column '{col}' has only one unique value: {unique_columns[0]}. It will be dropped.")
                 self.data.drop(columns=[col], inplace=True)
 
+        # Check for missing values and remove them
+        missing_values = self.data.isnull().sum().sum()
+        print(f"Total missing values after column removal: {missing_values}")
+
+        if missing_values > 0:
+            print("Removing rows with missing values...")
+            self.data.dropna(inplace=True)
+            print(f"Rows with missing values removed. New shape: {self.data.shape}")
+        else:
+            print("No missing values found.")
+
         print(f"Data processed. Final shape: {self.data.shape}")
 
     def save_data(self):
