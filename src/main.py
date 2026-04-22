@@ -16,11 +16,13 @@ st.title("Unemployment Dashboard")
 regions = visualizer.data['REF_AREA_LABEL'].unique()
 
 # User input for region selection
-selected_region = st.selectbox("Select a Region:", regions)
+selected_regions = st.multiselect("Select Region(s):", regions, default=regions[:1] if len(regions) > 0 else [])
 
-# Visualize the selected region
-if selected_region:
-    st.subheader(f"Visualizations for {selected_region}")
-    trends_fig, scatter_fig = visualizer.visualize_selected_area(selected_region)
+# Visualize the selected regions
+if selected_regions:
+    st.subheader(f"Visualizations for Selected Regions: {', '.join(selected_regions)}")
+    trends_fig, scatter_fig = visualizer.visualize_selected_areas(selected_regions)
     st.pyplot(trends_fig)
     st.pyplot(scatter_fig)
+else:
+    st.write("Please select at least one region to visualize.")
