@@ -26,3 +26,12 @@ if selected_regions:
     st.pyplot(scatter_fig)
 else:
     st.write("Please select at least one region to visualize.")
+
+# Area Chart Section
+st.subheader("Area Chart for a Single Region")
+selected_region_for_area = st.selectbox("Select a Region for Area Chart:", regions)
+if selected_region_for_area:
+    area_fig = visualizer.plot_area_chart(selected_region_for_area)
+    st.pyplot(area_fig)
+else:
+    st.write("Please select a region to display the area chart.")

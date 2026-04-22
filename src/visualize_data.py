@@ -98,6 +98,28 @@ class DataVisualizer:
         plt.tight_layout()
         return fig
 
+    def plot_area_chart(self, ref_area_label):
+        """
+        Plot an area chart for the selected REF_AREA_LABEL.
+
+        Args:
+            ref_area_label (str): The REF_AREA_LABEL to plot.
+
+        Returns:
+            matplotlib.figure.Figure: The figure object for the area chart.
+        """
+        filtered_data = self.filter_by_ref_area_label(ref_area_label)
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.fill_between(filtered_data['TIME_PERIOD'], filtered_data['OBS_VALUE'], alpha=0.5)
+        ax.plot(filtered_data['TIME_PERIOD'], filtered_data['OBS_VALUE'], marker='o', linestyle='-')
+        ax.set_title(f'Unemployment Area Chart for {ref_area_label}')
+        ax.set_xlabel('Time Period')
+        ax.set_ylabel('Observation Value')
+        ax.grid(True)
+        ax.tick_params(axis='x', rotation=45)
+        plt.tight_layout()
+        return fig
+
     def visualize_selected_areas(self, ref_area_labels):
         """
         Visualize the trends and scatter plot for the selected REF_AREA_LABEL(s).
