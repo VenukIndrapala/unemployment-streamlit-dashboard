@@ -98,6 +98,69 @@ class DataVisualizer:
         plt.tight_layout()
         return fig
 
+    def get_year_range(self, filtered_data=None):
+        """
+        Get the available year range from the data.
+
+        Args:
+            filtered_data (pd.DataFrame, optional): Filtered data to get year range from. 
+                If None, uses all data.
+
+        Returns:
+            tuple: (min_year, max_year)
+        """
+        if self.data is None:
+            raise ValueError("Data not loaded.")
+        
+        if filtered_data is not None and not filtered_data.empty:
+            return (int(filtered_data['TIME_PERIOD'].min()), int(filtered_data['TIME_PERIOD'].max()))
+        
+        return (int(self.data['TIME_PERIOD'].min()), int(self.data['TIME_PERIOD'].max()))
+
+    def plot_bar_chart_by_year_range(self, filtered_data, start_year, end_year):
+        """
+        Plot a bar chart showing OBS_VALUE for each year within a selected year range.
+
+        Args:
+            filtered_data (pd.DataFrame): The filtered DataFrame to plot.
+            start_year (int): The start year of the range.
+            end_year (int): The end year of the range.
+
+        Returns:
+            matplotlib.figure.Figure: The figure object for the plot.
+        """
+        # Filter data by year range
+        year_filtered = filtered_data[
+            (filtered_data['TIME_PERIOD'] >= start_year) & 
+            (filtered_data['TIME_PERIOD'] <= end_year)
+        ]
+        
+        if year_filtered.empty:
+            raise ValueError(f"No data found for year range {start_year}-{end_year}")
+        
+        # Sort by year
+        year_filtered = year_filtered.sort_values('TIME_PERIOD')
+        
+        fig, ax = plt.subplots(figsize=(12, 6))
+        bars = ax.bar(year_filtered['TIME_PERIOD'].astype(str), year_filtered['OBS_VALUE'], color='steelblue')
+        
+        ax.set_title(f'Unemployment OBS_VALUE ({start_year}-{end_year})')
+        ax.set_xlabel('Year')
+        ax.set_ylabel('Observation Value')
+        ax.tick_params(axis='x', rotation=45)
+        
+        # Add value labels on bars
+        for bar in bars:
+            height = bar.get_height()
+            ax.annotate(f'{height:.1f}',
+                        xy=(bar.get_x() + bar.get_width() / 2, height),
+                        xytext=(0, 3),
+                        textcoords="offset points",
+                        ha='center', va='bottom', fontsize=8)
+        
+        plt.tight_layout()
+        return fig
+
     def plot_area_chart(self, ref_area_label):
         """
         Plot an area chart for the selected REF_AREA_LABEL.
@@ -134,3 +197,4 @@ class DataVisualizer:
         trends_fig = self.plot_trends(filtered_data)
         scatter_fig = self.plot_scatter(filtered_data)
         return trends_fig, scatter_fig
+    
