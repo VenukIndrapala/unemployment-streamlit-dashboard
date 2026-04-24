@@ -98,6 +98,17 @@ class DataVisualizer:
         plt.tight_layout()
         return fig
 
+    def get_all_years(self):
+        """
+        Get all available years from the data.
+
+        Returns:
+            list: List of available years sorted in ascending order.
+        """
+        if self.data is None:
+            raise ValueError("Data not loaded.")
+        return sorted(self.data['TIME_PERIOD'].unique().tolist())
+
     def get_year_range(self, filtered_data=None):
         """
         Get the available year range from the data.
@@ -116,6 +127,61 @@ class DataVisualizer:
             return (int(filtered_data['TIME_PERIOD'].min()), int(filtered_data['TIME_PERIOD'].max()))
         
         return (int(self.data['TIME_PERIOD'].min()), int(self.data['TIME_PERIOD'].max()))
+
+    def plot_pie_chart_by_year(self, year):
+        """
+        Plot a pie chart showing the share of total OBS_VALUE by REF_AREA_LABEL for a specific year.
+        Only shows the top 10 regions, with the rest grouped as "Other".
+
+        Args:
+            year (int): The year to visualize.
+
+        Returns:
+            matplotlib.figure.Figure: The figure object for the pie chart.
+        """
+        if self.data is None:
+            raise ValueError("Data not loaded.")
+        
+        # Filter data for the selected year
+        year_data = self.data[self.data['TIME_PERIOD'] == year]
+        
+        if year_data.empty:
+            raise ValueError(f"No data found for year {year}")
+        
+        # Aggregate OBS_VALUE by REF_AREA_LABEL
+        aggregated = year_data.groupby('REF_AREA_LABEL')['OBS_VALUE'].sum().reset_index()
+        aggregated = aggregated.sort_values('OBS_VALUE', ascending=False)
+        
+        # Get top 10 and group the rest as "Other"
+        if len(aggregated) > 10:
+            top_10 = aggregated.head(10)
+            other_sum = aggregated.iloc[10:]['OBS_VALUE'].sum()
+            other_df = pd.DataFrame({'REF_AREA_LABEL': ['Other'], 'OBS_VALUE': [other_sum]})
+            pie_data = pd.concat([top_10, other_df], ignore_index=True)
+        else:
+            pie_data = aggregated
+        
+        # Calculate percentages
+        total = pie_data['OBS_VALUE'].sum()
+        percentages = (pie_data['OBS_VALUE'] / total * 100).round(1)
+        
+        fig, ax = plt.subplots(figsize=(10, 8))
+        wedges, texts, autotexts = ax.pie(
+            pie_data['OBS_VALUE'],
+            labels=pie_data['REF_AREA_LABEL'],
+            autopct='%1.1f%%',
+            startangle=90,
+            pctdistance=0.85
+        )
+        
+        # Make percentage text bold
+        for autotext in autotexts:
+            autotext.set_fontsize(9)
+            autotext.set_fontweight('bold')
+        
+        ax.set_title(f'Unemployment OBS_VALUE Share by Region ({year})\nTop 10 Regions')
+        plt.tight_layout()
+        return fig
 
     def plot_bar_chart_by_year_range(self, filtered_data, start_year, end_year):
         """
