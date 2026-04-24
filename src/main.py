@@ -62,3 +62,12 @@ if selected_region_for_bar:
         
         bar_fig = visualizer.plot_bar_chart_by_year_range(filtered_data, start_year, end_year)
         st.pyplot(bar_fig)
+
+# Pie Chart Section
+st.subheader("Pie Chart - OBS_VALUE Share by Region")
+all_years = visualizer.get_all_years()
+selected_year = st.selectbox("Select a Year:", all_years, key='pie_year')
+
+if selected_year:
+    pie_fig = visualizer.plot_pie_chart_by_year(selected_year)
+    st.pyplot(pie_fig)
