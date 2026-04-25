@@ -165,7 +165,7 @@ class DataVisualizer:
         total = pie_data['OBS_VALUE'].sum()
         percentages = (pie_data['OBS_VALUE'] / total * 100).round(1)
         
-        fig, ax = plt.subplots(figsize=(10, 8))
+        fig, ax = plt.subplots(figsize=(10, 6))
         wedges, texts, autotexts = ax.pie(
             pie_data['OBS_VALUE'],
             labels=pie_data['REF_AREA_LABEL'],
@@ -207,7 +207,7 @@ class DataVisualizer:
         # Sort by year
         year_filtered = year_filtered.sort_values('TIME_PERIOD')
         
-        fig, ax = plt.subplots(figsize=(12, 6))
+        fig, ax = plt.subplots(figsize=(10, 6))
         bars = ax.bar(year_filtered['TIME_PERIOD'].astype(str), year_filtered['OBS_VALUE'], color='steelblue')
         
         ax.set_title(f'Unemployment OBS_VALUE ({start_year}-{end_year})')
