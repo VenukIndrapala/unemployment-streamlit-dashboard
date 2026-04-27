@@ -1,5 +1,5 @@
 import streamlit as st
-from visualize_data import DataVisualizer
+from src.visualize_data import DataVisualizer
 
 def run_app():
     # Page configuration
