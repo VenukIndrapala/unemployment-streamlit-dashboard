@@ -1,5 +1,5 @@
 from src.preprocess_data import DataPreprocessor
-from src.streamlit_App import run_app
+from src.streamlit_app import run_app
 
 # Preprocess the data
 data_processor = DataPreprocessor("data/raw/worldbank_unemployment.csv", "data/processed/processed_unemployment.csv")
