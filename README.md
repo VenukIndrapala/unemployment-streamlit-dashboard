@@ -21,7 +21,7 @@ A data visualization dashboard built with Streamlit that displays unemployment d
 
 ```
 unemployment-streamlit-dashboard/
-├── app.py                    # Main entry point (placeholder)
+├── app.py                    # Main entry point
 ├── requirements.txt          # Python dependencies
 ├── README.md                 # This file
 ├── data/
@@ -30,16 +30,11 @@ unemployment-streamlit-dashboard/
 │   └── processed/            # Processed data files
 │       └── processed_unemployment.csv
 ├── src/
-│   ├── main.py              # Main script
 │   ├── preprocess_data.py   # Data preprocessing module
 │   ├── streamlit_app.py     # Streamlit dashboard app
 │   └── visualize_data.py    # Data visualization module
-├── pages/
+├── pages_old/
 │   └── year_range_bar_chart.py  # Additional Streamlit page
-├── assets/                  # Static assets
-├── docs/                    # Documentation
-├── notebooks/               # Jupyter notebooks
-└── tests/                  # Test files
 ```
 
 ## Data
